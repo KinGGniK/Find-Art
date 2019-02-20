@@ -1,0 +1,131 @@
+{% extends 'base.html' %} 
+
+{% load humanize %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <!-- Showcase -->
+  <section id="showcase">
+        <div class="container text-center">
+          <div class="home-search p-5">
+            <div class="overlay p-5">
+              <h1 class="display-4 mb-4">
+                Find Your True Art
+              </h1>
+              <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae quas, asperiores eveniet vel nostrum magnam
+                voluptatum tempore! Consectetur, id commodi!</p>
+              <div class="search">
+                <form action="{% url 'search' %}">
+                  <!-- Form Row 1 -->
+                  <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                      <label class="sr-only">Title</label>
+                      <input type="text" name="title" class="form-control" placeholder="Title" value="{{values.keywords}}">
+                    </div>
+    
+                    <div class="col-md-4 mb-3">
+                      <label class="sr-only">Artist</label>
+                      <select name="artist" class="form-control">
+                        <option selected="true" disabled="disabled">Artist </option>
+                        {% for artist in artists %}
+                          <option value="{{artist.full_name}}"
+                          >{{artist.full_name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+    
+                    <div class="col-md-4 mb-3">
+                      <label class="sr-only">Art Styles</label>
+                      <select name="style" class="form-control">
+                        <option selected="true" disabled="disabled">Art Styles </option>
+                        {% for key,value in styles.items %}
+                          <option value="{{key}}"
+                          >{{value}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <button id="btn-color" class="btn btn-secondary btn-block mt-4" type="submit">Find Art</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+      <!-- Alerts -->
+      {% include 'partials/_Alert.html' %}
+
+      <!-- Listings -->
+      <section id="listings" class="py-5">
+        <div class="container">
+          <h3 class="text-center mb-3">Latest Postings</h3>
+          <div class="row">
+              {% if pieces %}
+              {% for piece in pieces %}
+              <!-- Art Piece -->
+              <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card listing-preview">
+                      <img class="card-img-top" src="{{ piece.photo.url }}" alt="">
+                      <div class="card-body">
+                          <div class="listing-heading text-center">
+                              <h4 class="text-primary">{{ piece.title }}</h4>
+                              <p>
+                                  <i class="fas fa-map-marker text-secondary"></i> 
+                                  {{ piece.artist.full_name }}
+                              </p>
+                          </div>
+                          <hr>
+                          <div class="row py-2 text-secondary">
+                              <div class="col-6">
+                                  <i class="fas fa-th-large"></i> Art Style: {{ piece.art_type }}</div>
+                          </div>
+                          <hr>
+                          <div class="row text-secondary pb-2">
+                              <div class="col-6">
+                                  <i class="fas fa-clock"></i> {{ piece.date_entered | timesince }}</div>
+                          </div>
+                          <hr>
+                          <a href="{% url 'art_piece' piece.id %}" class="btn btn-secondary btn-block" id="btn-color">More Info</a>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="col-md-12">
+                <p>No Listings Available</p>
+              </div>
+            {% endif %}    
+          </div>
+        </div>
+      </section>
+    
+      <section id="services" class="py-5 bg-secondary text-white">
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <i class="fas fa-comments fa-4x mr-4"></i>
+              <hr>
+              <h3>Communication with Artists</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
+                hic dignissimos ratione ea quae.</p>
+            </div>
+            <div class="col-md-4">
+              <i class="fas fa-paint-brush fa-4x mr-4"></i>
+              <hr>
+              <h3>Open Platform For Your Art</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
+                hic dignissimos ratione ea quae.</p>
+            </div>
+            <div class="col-md-4">
+              <i class="fas fa-search fa-4x mr-4"></i>
+              <hr>
+              <h3>Make Inquiries on Interesting Art Pieces</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt, debitis nam! Repudiandae, provident iste consequatur
+                hic dignissimos ratione ea quae.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+{% endblock %}

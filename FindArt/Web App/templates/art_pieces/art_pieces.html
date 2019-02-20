@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block title %} Gallery {% endblock %}
+
+{% block content %}
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4">Browse Our Collections</h1>
+                <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt, pariatur!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'index' %}">
+                        <i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="breadcrumb-item active"> Browse Art Pieces</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Art Pieces -->
+<section id="listings" class="py-4">
+    <div class="container">
+        <div class="row">
+            {% if pieces %}
+                {% for piece in pieces %}
+                <!-- Art Piece -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card listing-preview">
+                        <img class="card-img-top" src="{{ piece.photo.url }}" alt="">
+                        <div class="card-body">
+                            <div class="listing-heading text-center">
+                                <h4 class="text-primary">{{ piece.title }}</h4>
+                                <p>
+                                    <i class="fas fa-map-marker text-secondary"></i> 
+                                    {{ piece.artist.full_name }}
+                                </p>
+                            </div>
+                            <hr>
+                            <div class="row py-2 text-secondary">
+                                <div class="col-6">
+                                    <i class="fas fa-th-large"></i> Art Style: {{ piece.art_type }}</div>
+                            </div>
+                            <hr>
+                            <div class="row text-secondary pb-2">
+                                <div class="col-6">
+                                    <i class="fas fa-clock"></i> {{ piece.date_entered | timesince }} ago</div>
+                            </div>
+                            <hr>
+                            <a href="{% url 'art_piece' piece.id %}" id="btn-color" class="btn btn-primary btn-block">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="col-md-12">
+                <p>No Listings Available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {% if pieces.has_other_pages %}
+                    <ul class="pagination">
+                        {% if pieces.has_previous %}
+                            <li class="page-item">
+                                <a href="?page={{pieces.previous_page_number}}" class="page-link">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a href="" class="page-link">&laquo;</a>
+                            </li>
+                        {% endif %}
+                        {% for i in pieces.paginator.page_range %}
+                            {% if pieces.number == i %}
+                                <li class="page-item active">
+                                    <a href="" class="page-link">{{i}}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a href="?page={{i}}" class="page-link">{{i}}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pieces.next %}
+                            <li class="page-item">
+                                <a href="?page={{pieces.next_page_number}}" class="page-link">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a href="" class="page-link">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
